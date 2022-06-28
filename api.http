@@ -1,0 +1,11 @@
+@host=http://localhost:3000
+
+
+###
+GET {{host}}/ HTTP/1.1
+
+###
+POST {{host}}/ HTTP/1.1
+
+###
+HEAD {{host}}/ HTTP/1.1
