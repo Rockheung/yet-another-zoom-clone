@@ -1,0 +1,87 @@
+body, [data-layout-app] {
+  background-color: black;
+}
+
+header {
+  padding: 0 0 0.67em;
+  max-width: none;
+}
+
+h6 {
+  margin: 0;
+  color: aliceblue
+}
+
+button {
+  margin: 0;
+  border: none;
+}
+
+
+
+[data-layout-app]{
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+[data-layout-header]{
+  position: absolute;
+  width: 100vw;
+  top: 0;
+}
+/* 
+[data-component-menu] {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  padding: 4px;
+  margin: 0;
+  border-width: 0;
+  border-radius: 18px;
+  background-color: lightcoral;
+}
+
+[data-component-share] {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 36px;
+  height: 36px;
+  padding: 4px;
+  margin: 0;
+  border-width: 0;
+  border-radius: 18px;
+  background-color: lightblue;
+} */
+
+[data-layout-main]{
+  padding: calc(18px + 36px + 18px) 0 0;
+  margin: 0;
+  max-width: none;
+}
+
+[data-layout-menu]{
+  width: 100vw;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+[data-layout-menu] div {
+  display: flex;
+}
+
+[data-layout-menu-center]{
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+[data-component-close] {
+  background-color: red;
+}

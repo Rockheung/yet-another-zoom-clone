@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yet Another Zoom Clone</title>
-  
+
   <link rel="stylesheet" href="/css/mvp.css">
+  <link rel="stylesheet" href="/css/style.css">
   <script type="module" src="/js/app.js"></script>
 </head>
+
 <body>
-  <h1>Yet Another Zoom Clone</h1>
-  <button>"Hi"</button>
+  <div data-layout-app>
+
+    <header data-layout-header>
+      <h6>Yet Another Zoom Clone</h6>
+    </header>
+
+    <main data-layout-main>
+      <div data-layout-screen></div>
+      <div data-layout-menu>
+        <div data-layout-menu-left>
+          <button data-component-audio>오디오</button>
+          <button data-component-video>비디오</button>
+        </div>
+        <div data-layout-menu-center>
+          <button data-component-room-list>방 목록</button>
+          <button data-component-participant>참가자</button>
+          <button data-component-chat>채팅</button>
+        </div>
+        <div data-layout-menu-right>
+          <button data-component-close>종료</button>
+        </div>
+      </div>
+    </main>
+
+  </div>
 </body>
+
 </html>
