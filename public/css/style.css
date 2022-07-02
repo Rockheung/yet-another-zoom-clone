@@ -30,6 +30,10 @@ button {
   width: 100vw;
   top: 0;
 }
+
+[data-component-join-room] {
+  background-color: aliceblue;
+}
 /* 
 [data-component-menu] {
   position: absolute;

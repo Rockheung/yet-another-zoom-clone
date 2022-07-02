@@ -5,14 +5,7 @@ const path = require("path");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 
-const io = new Server(server, {
-  cookie: {
-    name: "socket-id",
-    httpOnly: true,
-    sameSite: "strict",
-    maxAge: 86400
-  }
-});
+const io = new Server(server);
 
 app.use((req, res, next) => {
   if (req.method === "HEAD") {
@@ -23,10 +16,18 @@ app.use((req, res, next) => {
 app.use(express.static("public"));
 
 io.on("connection", (socket) => {
-  console.log("a user connected", socket.id);
-  console.log(socket.rooms)
-  socket.on("disconnect", () => {
-    console.log("user disconnected");
+  socket.on("join_room", (roomName) => {
+    socket.join(roomName);
+    socket.to(roomName).emit("welcome");
+  });
+  socket.on("offer", (offer, roomName) => {
+    socket.to(roomName).emit("offer", offer);
+  });
+  socket.on("answer", (answer, roomName) => {
+    socket.to(roomName).emit("answer", answer);
+  });
+  socket.on("ice", (ice, roomName) => {
+    socket.to(roomName).emit("ice", ice);
   });
 });
 
