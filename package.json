@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "postinstall": "cp node_modules/socket.io/client-dist/socket.io.esm.min.js public/js/",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
