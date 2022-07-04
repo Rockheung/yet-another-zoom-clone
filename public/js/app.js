@@ -54,10 +54,21 @@ function mountCameraOption(target, device) {
   return target;
 }
 
-function handleCameraChange(screen) {
+function handleCameraChange(form, screen, store) {
   return async function (evt) {
+    form.classList.add("hidden");
     const selectedDeviceId = evt.currentTarget.value;
-    screen.srcObject = await getMediaStream(selectedDeviceId);
+    store.stream = await getMediaStream(selectedDeviceId);
+    screen.srcObject = store.stream
+    // TODO: Re-connect peer stream
+    if (store.rtcConnection) {
+      const videoTrack = store.stream.getVideoTracks()[0];
+      const videoSender = store.rtcConnection
+        .getSenders()
+        .find((sender) => sender.track.kind === "video");
+      videoSender.replaceTrack(videoTrack);
+    }
+
   };
 }
 
@@ -114,7 +125,7 @@ function handleRemoteTracks(stream, rtcCon) {
   };
 }
 
-async function makeRTCConnection(screen, store, stream, socket) {
+async function makeRTCConnection(screen, store, socket) {
   const iceServers = [await getPublicStunServers()];
   const rtcConnection = new RTCPeerConnection({
     iceServers,
@@ -122,37 +133,37 @@ async function makeRTCConnection(screen, store, stream, socket) {
 
   rtcConnection.addEventListener("icecandidate", handleIce(store, socket));
   rtcConnection.addEventListener("track", handleTrack(screen));
-  stream.getTracks().forEach(handleRemoteTracks(stream, rtcConnection));
+  store.stream.getTracks().forEach(handleRemoteTracks(store.stream, rtcConnection));
 
   return rtcConnection;
 }
 
-function handleWebRTCWelcome(rtcCon, store, socket) {
+function handleWebRTCWelcome(store, socket) {
   return async function () {
-    store.dataChannel = rtcCon.createDataChannel("chat");
+    store.dataChannel = store.rtcConnection.createDataChannel("chat");
     store.dataChannel.addEventListener("message", (event) =>
       console.log(event.data)
     );
     console.log("made data channel");
-    const offer = await rtcCon.createOffer();
-    rtcCon.setLocalDescription(offer);
+    const offer = await store.rtcConnection.createOffer();
+    store.rtcConnection.setLocalDescription(offer);
     console.log("sent the offer");
     socket.emit("offer", offer, store.roomName);
   };
 }
 
-function handleWebRTCOffer(rtcCon, store, socket) {
+function handleWebRTCOffer(store, socket) {
   return async function (offer) {
-    rtcCon.addEventListener("datachannel", (event) => {
+    store.rtcConnection.addEventListener("datachannel", (event) => {
       store.dataChannel = event.channel;
       store.dataChannel.addEventListener("message", (event) =>
         console.log(event.data)
       );
     });
     console.log("received the offer");
-    rtcCon.setRemoteDescription(offer);
-    const answer = await rtcCon.createAnswer();
-    rtcCon.setLocalDescription(answer);
+    store.rtcConnection.setRemoteDescription(offer);
+    const answer = await store.rtcConnection.createAnswer();
+    store.rtcConnection.setLocalDescription(answer);
     socket.emit("answer", answer, store.roomName);
     console.log("sent the answer");
   };
@@ -184,26 +195,25 @@ async function main() {
     buttonChangeRoom,
     buttonCamera,
   } = getElements();
-  const stream = await getMediaStream();
-  screenHost.srcObject = stream;
-  const rtcConnection = await makeRTCConnection(
+  store.stream = await getMediaStream();
+  screenHost.srcObject = store.stream;
+  store.rtcConnection = await makeRTCConnection(
     screenGuest,
     store,
-    stream,
     socket
   );
   const sources = await getMediaSources();
   sources.reduce(mountCameraOption, selectCamera);
 
-  selectCamera.onchange = handleCameraChange(screenHost);
+  selectCamera.onchange = handleCameraChange(selectCameraModal, screenHost, store);
   formRoomName.onsubmit = handleRoomJoin(store, socket);
   buttonChangeRoom.onclick = handleVisible(formRoomName);
   buttonCamera.onclick = handleVisible(selectCameraModal);
 
-  socket.on("welcome", handleWebRTCWelcome(rtcConnection, store, socket));
-  socket.on("offer", handleWebRTCOffer(rtcConnection, store, socket));
-  socket.on("answer", handleWebRTCAnswer(rtcConnection));
-  socket.on("ice", handleWebRTCIce(rtcConnection));
+  socket.on("welcome", handleWebRTCWelcome(store, socket));
+  socket.on("offer", handleWebRTCOffer(store, socket));
+  socket.on("answer", handleWebRTCAnswer(store.rtcConnection));
+  socket.on("ice", handleWebRTCIce(store.rtcConnection));
 }
 
 main().catch(console.error);
