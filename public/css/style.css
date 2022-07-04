@@ -1,5 +1,10 @@
-body, [data-layout-app] {
+body,
+[data-layout-app] {
   background-color: black;
+}
+
+form {
+  background-color: aliceblue;
 }
 
 header {
@@ -9,7 +14,7 @@ header {
 
 h6 {
   margin: 0;
-  color: aliceblue
+  color: aliceblue;
 }
 
 button {
@@ -17,22 +22,34 @@ button {
   border: none;
 }
 
+.hidden {
+  display: none;
+}
 
-
-[data-layout-app]{
+[data-layout-app] {
   width: 100vw;
   height: 100vh;
   position: relative;
 }
 
-[data-layout-header]{
+[data-layout-header] {
   position: absolute;
   width: 100vw;
   top: 0;
 }
 
 [data-component-join-room] {
-  background-color: aliceblue;
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+}
+
+[data-layout-modal] {
+  position: absolute;
+  top: 50vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
 }
 /* 
 [data-component-menu] {
@@ -61,13 +78,13 @@ button {
   background-color: lightblue;
 } */
 
-[data-layout-main]{
+[data-layout-main] {
   padding: calc(18px + 36px + 18px) 0 0;
   margin: 0;
   max-width: none;
 }
 
-[data-layout-menu]{
+[data-layout-menu] {
   width: 100vw;
   display: flex;
   position: absolute;
@@ -80,7 +97,7 @@ button {
   display: flex;
 }
 
-[data-layout-menu-center]{
+[data-layout-menu-center] {
   flex: 1;
   justify-content: center;
   align-items: center;

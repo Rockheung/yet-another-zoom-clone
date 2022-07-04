@@ -20,13 +20,9 @@
     </header>
 
     <main data-layout-main>
-      <form data-component-join-room>
-        <label for="room_name">방 이름<input name="room_name" type="text"></label>
-        <button type="submit">참가</button>
-      </form>
       <div data-layout-screen>
-        <video data-component-video-host width="640" height="480" autoplay playsinline></video>
-        <video data-component-video-guest width="640" height="480" autoplay playsinline></video>
+        <video data-component-video-host width="320" height="240" autoplay playsinline></video>
+        <video data-component-video-guest width="320" height="240" autoplay playsinline></video>
       </div>
       <div data-layout-menu>
         <div data-layout-menu-left>
@@ -34,14 +30,22 @@
           <button data-component-menu-camera>비디오</button>
         </div>
         <div data-layout-menu-center>
-          <button data-component-menu-room-list>방 목록</button>
-          <button data-component-menu-participant>참가자</button>
+          <button data-component-menu-room-change>방 변경</button>
           <button data-component-menu-chat>채팅</button>
         </div>
         <div data-layout-menu-right>
           <button data-component-menu-close>종료</button>
         </div>
       </div>
+
+      <form data-layout-modal data-layout-select-device class="hidden">
+        <label for="device">카메라 선택<select data-component-select-device title="Camera Device" name="device">
+        </select></label>
+      </form>
+      <form data-layout-modal data-component-join-room class="hidden">
+        <label for="room_name">방 이름<input name="room_name" type="text"></label>
+        <button type="submit">참가</button>
+      </form>
     </main>
 
   </div>
