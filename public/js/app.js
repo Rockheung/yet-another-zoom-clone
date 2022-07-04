@@ -104,7 +104,7 @@ function handleIce(store, socket) {
 function handleTrack(screen) {
   return function (track) {
     console.log("🚀 ~ file: app.js ~ line 101 ~ data", track);
-    screen.srcObject = track.stream;
+    screen.srcObject = track.streams[0];
   };
 }
 
@@ -121,7 +121,7 @@ async function makeRTCConnection(screen, store, stream, socket) {
   });
 
   rtcConnection.addEventListener("icecandidate", handleIce(store, socket));
-  rtcConnection.addEventListener("addstream", handleTrack(screen));
+  rtcConnection.addEventListener("track", handleTrack(screen));
   stream.getTracks().forEach(handleRemoteTracks(stream, rtcConnection));
 
   return rtcConnection;
